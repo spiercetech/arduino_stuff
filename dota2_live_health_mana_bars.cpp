@@ -17,17 +17,21 @@ ESP8266WebServer server(80);
 
 String webPage = "";
 void health_loop(int li, int a, int b, int c){
-    clear_health();
+    // clear_health();
     for(int k = 0; k < li; k++) { 
       leds[k].setRGB(a, b, c);FastLED.show();
-      FastLED.delay(20);
+    }
+    for(int k = 9; k >= li; k--) { 
+      leds[k]= CRGB::Black;FastLED.show();
     }
 }
 void mana_loop(int li, int a, int b, int c){
-    clear_mana();
+    // clear_mana();
     for(int k = 19; k > li; k--) { 
       leds[k].setRGB(a, b, c);FastLED.show();
-      FastLED.delay(20);
+    }
+    for(int k = 10; k <= li; k++) { 
+      leds[k]= CRGB::Black;FastLED.show();
     }
 }
 void setup(void){
