@@ -17,7 +17,6 @@ ESP8266WebServer server(80);
 
 String webPage = "";
 void health_loop(int li, int a, int b, int c){
-    // clear_health();
     for(int k = 0; k < li; k++) { 
       leds[k].setRGB(a, b, c);FastLED.show();
     }
@@ -26,7 +25,6 @@ void health_loop(int li, int a, int b, int c){
     }
 }
 void mana_loop(int li, int a, int b, int c){
-    // clear_mana();
     for(int k = 19; k > li; k--) { 
       leds[k].setRGB(a, b, c);FastLED.show();
     }
@@ -34,10 +32,27 @@ void mana_loop(int li, int a, int b, int c){
       leds[k]= CRGB::Black;FastLED.show();
     }
 }
+void day_loop(int a, int b, int c){
+    for(int k = 26; k < 50; k++) { 
+      leds[k].setRGB(a, b, c);FastLED.show();
+    }
+}
+void effect_loop(int a, int b, int c){
+    for(int k = 26; k < 50; k++) {
+      if(k%2 == 0){
+        leds[k].setRGB(a, b, c);FastLED.show();
+      }
+    }
+}
+void ambient_loop(int a, int b, int c){
+    for(int k = 0; k < 50; k++) {
+      leds[k].setRGB(a, b, c);FastLED.show();
+    }
+}
 void setup(void){
   FastLED.addLeds<NEOPIXEL, 15>(leds, NUM_LEDS);
-  webPage += "<h1>ESP8266 Web Server</h1><p>Socket #1 <a href=\"socket1On\"><button>ON</button></a>&nbsp;<a href=\"socket1Off\"><button>OFF</button></a></p>";
-  webPage += "<p>Socket #2 <a href=\"socket2On\"><button>ON</button></a>&nbsp;<a href=\"socket2Off\"><button>OFF</button></a></p>";
+  webPage += "<h1>ESP8266 Web Server</h1><p>Socket #1 <a href=\"socket1On\"><button>ON</button></a>&nbsp;<a href=\"/mana/0\"><button>OFF</button></a></p>";
+  webPage += "<p>Socket #2 <a href=\"socket2On\"><button>ON</button></a>&nbsp;<a href=\"/health/0\"><button>OFF</button></a></p>";
   
   delay(1000);
   Serial.begin(115200);
@@ -61,6 +76,65 @@ void setup(void){
   
   server.on("/", [](){
     server.send(200, "text/html", webPage);
+  });
+
+  server.on("/game_start", [](){
+    server.send(200, "text/html", webPage);
+    health_loop(10, 130,224,130);
+    mana_loop(9, 130,130,224);
+    leds[22]= CRGB::Black;FastLED.show();
+    leds[23]= CRGB::Black;FastLED.show();
+    leds[24]= CRGB::Black;FastLED.show();
+    leds[25]= CRGB::Black;FastLED.show();
+  });
+
+  server.on("/effect", [](){
+     int r = server.arg("r").toInt();
+     int g = server.arg("g").toInt();
+     int b = server.arg("b").toInt();
+    server.send(200, "text/html", webPage);
+    effect_loop(g, r, b);
+  });
+
+  server.on("/ambient_loop", [](){
+     int r = server.arg("r").toInt();
+     int g = server.arg("g").toInt();
+     int b = server.arg("b").toInt();
+    server.send(200, "text/html", webPage);
+    ambient_loop(g, r, b);
+  });
+  
+  server.on("/skill/1/on", [](){
+    server.send(200, "text/html", webPage);
+    leds[22].setRGB(155, 155, 215);FastLED.show();
+  });
+  server.on("/skill/1/off", [](){
+    server.send(200, "text/html", webPage);
+    leds[22]= CRGB::Black;FastLED.show();
+  });
+  server.on("/skill/2/on", [](){
+    server.send(200, "text/html", webPage);
+    leds[23].setRGB(155, 155, 215);FastLED.show();
+  });
+  server.on("/skill/2/off", [](){
+    server.send(200, "text/html", webPage);
+    leds[23]= CRGB::Black;FastLED.show();
+  });
+  server.on("/skill/3/on", [](){
+    server.send(200, "text/html", webPage);
+    leds[24].setRGB(155, 155, 215);FastLED.show();
+  });
+  server.on("/skill/3/off", [](){
+    server.send(200, "text/html", webPage);
+    leds[24]= CRGB::Black;FastLED.show();
+  });
+  server.on("/skill/4/on", [](){
+    server.send(200, "text/html", webPage);
+    leds[25].setRGB(155, 155, 215);FastLED.show();
+  });
+  server.on("/skill/4/off", [](){
+    server.send(200, "text/html", webPage);
+    leds[25]= CRGB::Black;FastLED.show();
   });
 
   server.on("/health/0", [](){
@@ -118,25 +192,25 @@ void setup(void){
 
   server.on("/mana/10", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(18,0,0,224);
+    mana_loop(18,20,20,224);
   });
 
   server.on("/mana/20", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(17,0,0,224);
+    mana_loop(17,20,20,224);
   });
 
   server.on("/mana/30", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(16,30,30,224);
+    mana_loop(16,50,50,224);
   });
   server.on("/mana/40", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(15,30,30,224);
+    mana_loop(15,50,50,224);
   });  
   server.on("/mana/50", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(14,70,70,224);
+    mana_loop(14,90,90,224);
   });  
   server.on("/mana/60", [](){
     server.send(200, "text/html", webPage);
@@ -144,7 +218,7 @@ void setup(void){
   });  
   server.on("/mana/70", [](){
     server.send(200, "text/html", webPage);
-    mana_loop(12,70,70,224);
+    mana_loop(12,90,90,224);
   });  
   server.on("/mana/80", [](){
     server.send(200, "text/html", webPage);
@@ -157,6 +231,14 @@ void setup(void){
   server.on("/mana/100", [](){
     server.send(200, "text/html", webPage);
     mana_loop(9, 130,130,224);
+  });
+  server.on("/day", [](){
+    server.send(200, "text/html", webPage);
+    day_loop(224,224,0);
+  });
+  server.on("/night", [](){
+    server.send(200, "text/html", webPage);
+    day_loop(20,20,224);
   });
 
   server.begin();
