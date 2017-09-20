@@ -6,10 +6,9 @@
 #include <EEPROM.h>
 
 /*
- * This example serves a "hello world" on a WLAN and a SoftAP at the same time.
- * The SoftAP allow you to configure WLAN parameters at run time. They are not setup in the sketch but saved on EEPROM.
- * 
- * This is a captive portal because through the softAP it will redirect any http request to http://192.168.4.1/
+ * Connect to Spider Bot! Wifi Network (pass: 12345678)
+ * Navigate to http://192.168.4.1/
+ * Control the Spider
  */
 
 /* Set these to your desired softAP credentials. They are not configurable at runtime */
